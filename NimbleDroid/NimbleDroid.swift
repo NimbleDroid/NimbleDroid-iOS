@@ -14,4 +14,17 @@ public class NDScenario : NSObject {
     public class func end(bookendID : String) {
         NSLog("NDScenario.end %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
     }
+
+    public class func coldStartupEnd() {
+        let endTime = NSDate.init().timeIntervalSince1970 * 1000000
+        let pid = getpid()
+        let mib = [CTL_KERN, KERN_PROC, KERN_PROC_PID, pid]
+        var proc = kinfo_proc()
+        var size = MemoryLayout<kinfo_proc>.size
+        sysctl(UnsafeMutablePointer<Int32>(mutating: mib) , UInt32(mib.count), &proc, &size, nil, 0)
+        let tv_sec = Double(proc.kp_proc.p_un.__p_starttime.tv_sec)
+        let tv_usec = Double(proc.kp_proc.p_un.__p_starttime.tv_usec)
+        let startTime = tv_sec * 1000000.0 + tv_usec
+        NSLog("NDScenario.coldStartupEnd %f %f", startTime, endTime)
+    }
 }
