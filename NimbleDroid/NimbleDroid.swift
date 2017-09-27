@@ -36,7 +36,7 @@ public class NDScenario : NSObject {
     }
 
     public class func setupWarning() {
-        NSLog("NDScenario not initialized, please call setup in application:willFinishLaunchingWithOptions:")
+        NSLog("NDScenario is not initialized, please call setup in application:willFinishLaunchingWithOptions:")
     }
 
     public class func begin(bookendID : String) {
