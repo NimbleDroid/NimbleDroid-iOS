@@ -35,7 +35,14 @@ public class NDScenario : NSObject {
         initialized = true
     }
 
+    public class func setupWarning() {
+        NSLog("NDScenario not initialized, please call setup in application:willFinishLaunchingWithOptions:")
+    }
+
     public class func begin(bookendID : String) {
+        if !initialized {
+            setupWarning()
+        }
         if bookendID == scenario {
             raise(SIGSTOP)
         }
@@ -46,6 +53,9 @@ public class NDScenario : NSObject {
         NSLog("NDScenario.end %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
         if bookendID == scenario {
             raise(SIGSTOP)
+        }
+        if !initialized {
+            setupWarning()
         }
     }
 
@@ -62,6 +72,9 @@ public class NDScenario : NSObject {
         NSLog("NDScenario.coldStartupEnd %f %f", startTime, endTime)
         if coldStartup {
             raise(SIGSTOP)
+        }
+        if !initialized {
+            setupWarning()
         }
     }
 }
