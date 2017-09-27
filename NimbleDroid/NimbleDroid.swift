@@ -7,12 +7,56 @@
 //
 
 public class NDScenario : NSObject {
+    static var coldStartup = false
+    static var initialized = false
+    static var scenario : String? = nil
+
+    public class func setup() {
+        if initialized {
+            NSLog("NDScenario already initialized")
+            return
+        }
+        let processInfo = ProcessInfo.processInfo
+        let arguments = processInfo.arguments
+        let processIdentifier = processInfo.processIdentifier
+        if let scenarioIndex = arguments.index(of: "--ndScenario") {
+            if let bookendIndex = arguments.index(scenarioIndex, offsetBy: 1, limitedBy: arguments.endIndex - 1) {
+                scenario = arguments[bookendIndex]
+                NSLog("NDScenario initialized pid %d scenario %@", processIdentifier, scenario!)
+            } else {
+                NSLog("NDScenario failed to initialize pid %d, --ndScenario missing bookendID", processIdentifier)
+            }
+        } else if arguments.contains("--ndColdStartup") {
+            coldStartup = true
+            NSLog("NDScenario initialized pid %d coldStartup", processIdentifier)
+        } else {
+            NSLog("NDScenario initialized pid %d", processIdentifier)
+        }
+        initialized = true
+    }
+
+    public class func warnSetup() {
+        NSLog("NDScenario is not initialized, please call setup in application:willFinishLaunchingWithOptions:")
+    }
+
     public class func begin(bookendID : String) {
+        if !initialized {
+            warnSetup()
+        }
+        if bookendID == scenario {
+            raise(SIGSTOP)
+        }
         NSLog("NDScenario.begin %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
     }
 
     public class func end(bookendID : String) {
         NSLog("NDScenario.end %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
+        if bookendID == scenario {
+            raise(SIGSTOP)
+        }
+        if !initialized {
+            warnSetup()
+        }
     }
 
     public class func coldStartupEnd() {
@@ -26,5 +70,11 @@ public class NDScenario : NSObject {
         let tv_usec = Double(proc.kp_proc.p_un.__p_starttime.tv_usec)
         let startTime = tv_sec * 1000000.0 + tv_usec
         NSLog("NDScenario.coldStartupEnd %f %f", startTime, endTime)
+        if coldStartup {
+            raise(SIGSTOP)
+        }
+        if !initialized {
+            warnSetup()
+        }
     }
 }
