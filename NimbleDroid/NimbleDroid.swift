@@ -43,23 +43,26 @@ public class NDScenario : NSObject {
         if !initialized {
             warnSetup()
         }
+        NSLog("NDScenario.begin %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
         if bookendID == scenario {
             raise(SIGSTOP)
         }
-        NSLog("NDScenario.begin %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
     }
 
     public class func end(bookendID : String) {
+        if !initialized {
+            warnSetup()
+        }
         NSLog("NDScenario.end %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
         if bookendID == scenario {
             raise(SIGSTOP)
         }
-        if !initialized {
-            warnSetup()
-        }
     }
 
     public class func coldStartupEnd() {
+        if !initialized {
+            warnSetup()
+        }
         let endTime = NSDate.init().timeIntervalSince1970 * 1000000
         let pid = getpid()
         let mib = [CTL_KERN, KERN_PROC, KERN_PROC_PID, pid]
@@ -72,9 +75,6 @@ public class NDScenario : NSObject {
         NSLog("NDScenario.coldStartupEnd %f %f", startTime, endTime)
         if coldStartup {
             raise(SIGSTOP)
-        }
-        if !initialized {
-            warnSetup()
         }
     }
 }
