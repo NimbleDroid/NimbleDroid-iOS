@@ -44,6 +44,7 @@ public class NDScenario : NSObject {
             warnSetup()
         }
         NSLog("NDScenario.begin %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
+        fflush(stderr)
         if bookendID == scenario {
             raise(SIGSTOP)
         }
@@ -54,6 +55,7 @@ public class NDScenario : NSObject {
             warnSetup()
         }
         NSLog("NDScenario.end %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
+        fflush(stderr)
         if bookendID == scenario {
             raise(SIGSTOP)
         }
@@ -73,6 +75,7 @@ public class NDScenario : NSObject {
         let tv_usec = Double(proc.kp_proc.p_un.__p_starttime.tv_usec)
         let startTime = tv_sec * 1000000.0 + tv_usec
         NSLog("NDScenario.coldStartupEnd %f %f", startTime, endTime)
+        fflush(stderr)
         if coldStartup {
             raise(SIGSTOP)
         }
