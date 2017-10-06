@@ -6,6 +6,8 @@
 //  Copyright © 2017 NimbleDroid. All rights reserved.
 //
 
+import Foundation
+
 public class NDScenario : NSObject {
     static var coldStartup = false
     static var initialized = false

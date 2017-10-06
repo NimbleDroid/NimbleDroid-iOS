@@ -6,7 +6,7 @@
 //  Copyright © 2017 NimbleDroid. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for NimbleDroid.
 FOUNDATION_EXPORT double NimbleDroidVersionNumber;
