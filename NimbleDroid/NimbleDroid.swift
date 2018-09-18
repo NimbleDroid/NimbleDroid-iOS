@@ -45,7 +45,7 @@ public class NDScenario : NSObject {
         if !initialized {
             warnSetup()
         }
-        NSLog("NDScenario.begin %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
+        NSLog("NDScenario.begin %@ %f", bookendID, Double(clock_gettime_nsec_np(_CLOCK_MONOTONIC_RAW)) / 1000.0)
         fflush(stderr)
         if bookendID == scenario {
             raise(SIGSTOP)
@@ -56,7 +56,7 @@ public class NDScenario : NSObject {
         if !initialized {
             warnSetup()
         }
-        NSLog("NDScenario.end %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
+        NSLog("NDScenario.end %@ %f", bookendID, Double(clock_gettime_nsec_np(_CLOCK_MONOTONIC_RAW)) / 1000.0)
         fflush(stderr)
         if bookendID == scenario {
             raise(SIGSTOP)
@@ -67,16 +67,17 @@ public class NDScenario : NSObject {
         if !initialized {
             warnSetup()
         }
-        let endTime = NSDate.init().timeIntervalSince1970 * 1000000
+        var stopTime = timeval()
+        gettimeofday(&stopTime, nil)
         let pid = getpid()
         let mib = [CTL_KERN, KERN_PROC, KERN_PROC_PID, pid]
         var proc = kinfo_proc()
         var size = MemoryLayout<kinfo_proc>.size
         sysctl(UnsafeMutablePointer<Int32>(mutating: mib) , UInt32(mib.count), &proc, &size, nil, 0)
-        let tv_sec = Double(proc.kp_proc.p_un.__p_starttime.tv_sec)
-        let tv_usec = Double(proc.kp_proc.p_un.__p_starttime.tv_usec)
-        let startTime = tv_sec * 1000000.0 + tv_usec
-        NSLog("NDScenario.coldStartupEnd %f %f", startTime, endTime)
+        let startTime = proc.kp_proc.p_un.__p_starttime
+        let beginTime = Double(startTime.tv_sec) * 1000000.0 + Double(startTime.tv_usec)
+        let endTime = Double(stopTime.tv_sec) * 1000000.0 + Double(stopTime.tv_usec)
+        NSLog("NDScenario.coldStartupEnd %f %f", beginTime, endTime)
         fflush(stderr)
         if coldStartup {
             raise(SIGSTOP)
