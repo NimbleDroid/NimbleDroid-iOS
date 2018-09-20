@@ -17,6 +17,6 @@ Pod::Spec.new do |s|
   s.documentation_url = 'http://docs.nimbledroid.com/iosUserGuide.html'
   s.ios.deployment_target = '8.0'
   s.swift_version = '3.0'
-  s.source_files = 'NimbleDroid/*'
+  s.source_files = 'NimbleDroid/*.{h,swift}'
   s.social_media_url = 'https://twitter.com/NimbleDroid'
 end
