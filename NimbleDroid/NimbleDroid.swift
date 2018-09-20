@@ -45,7 +45,7 @@ public class NDScenario : NSObject {
         if !initialized {
             warnSetup()
         }
-        NSLog("NDScenario.begin %@ %f", bookendID, Double(clock_gettime_nsec_np(_CLOCK_MONOTONIC_RAW)) / 1000.0)
+        NSLog("NDScenario.begin %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
         fflush(stderr)
         if bookendID == scenario {
             raise(SIGSTOP)
@@ -56,7 +56,7 @@ public class NDScenario : NSObject {
         if !initialized {
             warnSetup()
         }
-        NSLog("NDScenario.end %@ %f", bookendID, Double(clock_gettime_nsec_np(_CLOCK_MONOTONIC_RAW)) / 1000.0)
+        NSLog("NDScenario.end %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
         fflush(stderr)
         if bookendID == scenario {
             raise(SIGSTOP)
