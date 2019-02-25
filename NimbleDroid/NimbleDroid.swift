@@ -13,7 +13,7 @@ public class NDScenario : NSObject {
     static var initialized = false
     static var scenario : String? = nil
 
-    public class func setup() {
+    @objc public class func setup() {
         if initialized {
             NSLog("NDScenario already initialized")
             return
@@ -37,11 +37,11 @@ public class NDScenario : NSObject {
         initialized = true
     }
 
-    class func warnSetup() {
+    @objc class func warnSetup() {
         NSLog("NDScenario is not initialized, please call setup in application:willFinishLaunchingWithOptions:")
     }
 
-    public class func begin(bookendID : String) {
+    @objc public class func begin(bookendID : String) {
         if !initialized {
             warnSetup()
         }
@@ -52,7 +52,7 @@ public class NDScenario : NSObject {
         }
     }
 
-    public class func end(bookendID : String) {
+    @objc public class func end(bookendID : String) {
         if !initialized {
             warnSetup()
         }
@@ -63,7 +63,7 @@ public class NDScenario : NSObject {
         }
     }
 
-    public class func coldStartupEnd() {
+    @objc public class func coldStartupEnd() {
         if !initialized {
             warnSetup()
         }
