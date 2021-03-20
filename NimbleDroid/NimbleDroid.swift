@@ -41,11 +41,26 @@ public class NDScenario : NSObject {
         NSLog("NDScenario is not initialized, please call setup in application:willFinishLaunchingWithOptions:")
     }
 
-    @objc public class func begin(bookendID : String) {
+    @objc public class func begin(bookendID : String, timeInterval : TimeInterval) {
         if !initialized {
             warnSetup()
         }
-        NSLog("NDScenario.begin %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
+        NSLog("NDScenario.begin %@ %f", bookendID, timeInterval * 1000000)
+        fflush(stderr)
+        if bookendID == scenario {
+            raise(SIGSTOP)
+        }
+    }
+
+    @objc public class func begin(bookendID : String) {
+        begin(bookendID: bookendID, timeInterval: NSDate.init().timeIntervalSince1970)
+    }
+
+    @objc public class func end(bookendID : String, timeInterval : TimeInterval) {
+        if !initialized {
+            warnSetup()
+        }
+        NSLog("NDScenario.end %@ %f", bookendID, timeInterval * 1000000)
         fflush(stderr)
         if bookendID == scenario {
             raise(SIGSTOP)
@@ -53,14 +68,7 @@ public class NDScenario : NSObject {
     }
 
     @objc public class func end(bookendID : String) {
-        if !initialized {
-            warnSetup()
-        }
-        NSLog("NDScenario.end %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
-        fflush(stderr)
-        if bookendID == scenario {
-            raise(SIGSTOP)
-        }
+        end(bookendID: bookendID, timeInterval: NSDate.init().timeIntervalSince1970)
     }
 
     @objc public class func coldStartupEnd() {
