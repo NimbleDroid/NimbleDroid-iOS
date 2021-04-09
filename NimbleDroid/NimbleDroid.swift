@@ -45,7 +45,7 @@ public class NDScenario : NSObject {
         if !initialized {
             warnSetup()
         }
-        NSLog("NDScenario.begin %@ %f", bookendID, timeInterval * 1000000)
+        NSLog("NDScenario.beginWithInterval %@ %f", bookendID, timeInterval * 1000000)
         fflush(stderr)
         if bookendID == scenario {
             raise(SIGSTOP)
@@ -53,14 +53,21 @@ public class NDScenario : NSObject {
     }
 
     @objc public class func begin(bookendID : String) {
-        begin(bookendID: bookendID, timeInterval: NSDate.init().timeIntervalSince1970)
+        if !initialized {
+            warnSetup()
+        }
+        NSLog("NDScenario.begin %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
+        fflush(stderr)
+        if bookendID == scenario {
+            raise(SIGSTOP)
+        }
     }
 
     @objc public class func end(bookendID : String, timeInterval : TimeInterval) {
         if !initialized {
             warnSetup()
         }
-        NSLog("NDScenario.end %@ %f", bookendID, timeInterval * 1000000)
+        NSLog("NDScenario.endWithInterval %@ %f", bookendID, timeInterval * 1000000)
         fflush(stderr)
         if bookendID == scenario {
             raise(SIGSTOP)
@@ -68,7 +75,14 @@ public class NDScenario : NSObject {
     }
 
     @objc public class func end(bookendID : String) {
-        end(bookendID: bookendID, timeInterval: NSDate.init().timeIntervalSince1970)
+        if !initialized {
+            warnSetup()
+        }
+        NSLog("NDScenario.end %@ %f", bookendID, NSDate.init().timeIntervalSince1970 * 1000000)
+        fflush(stderr)
+        if bookendID == scenario {
+            raise(SIGSTOP)
+        }
     }
 
     @objc public class func coldStartupEnd() {

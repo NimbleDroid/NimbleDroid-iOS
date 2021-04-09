@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name = 'NimbleDroid'
-  s.version = '1.2.0'
+  s.version = '1.2.1'
   s.summary = 'Functional performance testing using NimbleDroid'
   s.homepage = 'https://github.com/NimbleDroid/NimbleDroid-iOS'
   s.license = 'None'
