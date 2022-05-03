@@ -1,11 +1,3 @@
-//
-//  NimbleDroid.h
-//  NimbleDroid
-//
-//  Created by Thomas Huzij on 5/8/17.
-//  Copyright © 2017 NimbleDroid. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 
 //! Project version number for NimbleDroid.
